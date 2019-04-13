@@ -13,7 +13,7 @@ import com.asiainfo.flume.util.KafkaUtils;
 import com.google.common.base.Charsets;
 
 /**
- * TODO
+ * Kafka Sink 自定义实现
  * 
  * @author       zq
  * @date         2018年1月11日  下午4:34:43

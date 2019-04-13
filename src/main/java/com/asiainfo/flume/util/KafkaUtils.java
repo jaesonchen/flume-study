@@ -44,7 +44,7 @@ public class KafkaUtils {
         return template;
     }
     
-    //consumer配置项
+    //consumer配置项，通常从Context里读取配置
     private static Map<String, Object> consumerProps(Context context) {
         
         Map<String, Object> props = new HashMap<>();
@@ -58,7 +58,7 @@ public class KafkaUtils {
         return props;
     }
     
-    //producer配置项
+    //producer配置项，通常从Context里读取配置
     private static Map<String, Object> senderProps(Context context) {
         
         Map<String, Object> props = new HashMap<>();

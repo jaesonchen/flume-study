@@ -41,11 +41,9 @@ public class RegexExtractorInterceptor implements Interceptor {
         this.serializers = serializers;
     }
 
-    @Override public void initialize() {
-    }
+    @Override public void initialize() {}
 
-    @Override public void close() {
-    }
+    @Override public void close() {}
 
     @Override
     public Event intercept(Event event) {

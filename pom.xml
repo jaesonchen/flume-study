@@ -50,12 +50,6 @@
             <artifactId>spring-kafka</artifactId>
             <version>1.2.2.RELEASE</version>
         </dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams -->
-		<dependency>
-		    <groupId>org.apache.kafka</groupId>
-		    <artifactId>kafka-streams</artifactId>
-		    <version>0.11.0.0</version>
-		</dependency>
     </dependencies>
     
     <build>

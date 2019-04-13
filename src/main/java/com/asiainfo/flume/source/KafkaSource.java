@@ -18,7 +18,7 @@ import com.asiainfo.flume.util.KafkaUtils;
 import com.google.common.base.Charsets;
 
 /**
- * TODO
+ * kafka Source 自定义实现
  * 
  * @author       zq
  * @date         2018年1月11日  下午2:07:52
@@ -62,8 +62,8 @@ public class KafkaSource extends AbstractPollableSource {
                 Event event = new SimpleEvent();
                 Map<String, String> headers = new HashMap<String, String>();
                 headers.put("timestamp", String.valueOf(System.currentTimeMillis()));
-                event.setBody(message.value().getBytes(Charsets.UTF_8));
                 event.setHeaders(headers);
+                event.setBody(message.value().getBytes(Charsets.UTF_8));
                 getChannelProcessor().processEvent(event);
             }
         });
