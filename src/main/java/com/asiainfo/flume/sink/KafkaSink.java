@@ -22,11 +22,9 @@ import com.google.common.base.Charsets;
 public class KafkaSink extends AbstractSink implements Configurable {
 
     KafkaTemplate<Integer, String> template;
+    String topic;
     
     /* 
-     * TODO
-     * @return
-     * @throws EventDeliveryException
      * @see org.apache.flume.Sink#process()
      */
     @Override
@@ -40,7 +38,7 @@ public class KafkaSink extends AbstractSink implements Configurable {
                 return Status.BACKOFF;
             }
             tx.begin();
-            this.template.sendDefault(new String(event.getBody(), Charsets.UTF_8));
+            KafkaUtils.send(this.template, this.topic, new String(event.getBody(), Charsets.UTF_8));
             tx.commit();
             return Status.READY;
         } catch(Exception ex) {
@@ -51,15 +49,12 @@ public class KafkaSink extends AbstractSink implements Configurable {
         }
     }
 
-    /* 
-     * TODO
-     * @param context
+    /*
      * @see org.apache.flume.conf.Configurable#configure(org.apache.flume.Context)
      */
     @Override
     public void configure(Context context) {
-        
-        this.template = KafkaUtils.createTemplate(context);
-        this.template.setDefaultTopic(context.getString("defaultTopic", "default"));
+        this.template = KafkaUtils.<Integer, String>createTemplate(context);
+        this.topic = context.getString("kafka.topic", "default");
     }
 }

@@ -27,35 +27,31 @@ import com.google.common.base.Charsets;
 public class KafkaSource extends AbstractPollableSource {
 
     KafkaMessageListenerContainer<Integer, String> container;
+    String[] topics;
     
     /* 
-     * TODO
-     * @return
-     * @throws EventDeliveryException
      * @see org.apache.flume.source.AbstractPollableSource#doProcess()
      */
     @Override
     protected Status doProcess() throws EventDeliveryException {
         
         try {
-            //非监听方式在这里取kafka信息，调用getChannelProcessor().processEvent(event);
+            //非监听方式在这里取kafka ConsumerRecord封装event，调用getChannelProcessor().processEvent(event);
             return Status.READY;
         } catch (Exception ex) {
-            return Status.BACKOFF;
+            // ignore
         }
+        return Status.BACKOFF;
     }
 
     /* 
-     * TODO
-     * @param context
-     * @throws FlumeException
      * @see org.apache.flume.source.BasicSourceSemantics#doConfigure(org.apache.flume.Context)
      */
     @Override
     protected void doConfigure(Context context) throws FlumeException {
         
-        String[] topics = context.getString("topics").split("\\s+");
-        ContainerProperties containerProps = new ContainerProperties(topics);
+        this.topics = context.getString("kafka.topics").split("\\s+");
+        ContainerProperties containerProps = new ContainerProperties(this.topics);
         containerProps.setMessageListener(new MessageListener<Integer, String>() {
             @Override
             public void onMessage(ConsumerRecord<Integer, String> message) {
@@ -67,12 +63,10 @@ public class KafkaSource extends AbstractPollableSource {
                 getChannelProcessor().processEvent(event);
             }
         });
-        this.container = KafkaUtils.createContainer(containerProps, context);
+        this.container = KafkaUtils.<Integer, String>createContainer(containerProps, context);
     }
 
     /* 
-     * TODO
-     * @throws FlumeException
      * @see org.apache.flume.source.BasicSourceSemantics#doStart()
      */
     @Override
@@ -80,9 +74,7 @@ public class KafkaSource extends AbstractPollableSource {
         this.container.start();
     }
 
-    /* 
-     * TODO
-     * @throws FlumeException
+    /*
      * @see org.apache.flume.source.BasicSourceSemantics#doStop()
      */
     @Override
