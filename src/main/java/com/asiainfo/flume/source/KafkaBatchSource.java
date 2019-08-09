@@ -244,7 +244,7 @@ public class KafkaBatchSource extends AbstractPollableSource implements Configur
             
             // 读取broker中的consumer offset
             Map<TopicPartition, OffsetAndMetadata> kafkaOffsets = getKafkaOffsets(consumer, topic);
-            if (kafkaOffsets == null || !kafkaOffsets.isEmpty()) {
+            if (kafkaOffsets == null || kafkaOffsets.isEmpty()) {
                 return;
             }
             // No Kafka offsets found. Migrating zookeeper offsets

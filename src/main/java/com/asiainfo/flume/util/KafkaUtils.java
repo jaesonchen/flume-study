@@ -32,12 +32,12 @@ public class KafkaUtils {
     
     // kafka消费者容监听容器，消费所有分区，最大并发数超过分区数的，超过部分无效
     public static <K extends java.io.Serializable, V extends java.io.Serializable> ConcurrentMessageListenerContainer<K, V> 
-        createConCurrentContainer(ContainerProperties cp, Context context) {
+        createConcurrentContainer(ContainerProperties cp, Context context) {
         
         Map<String, Object> props = consumerProps(context);
         DefaultKafkaConsumerFactory<K, V> factory = new DefaultKafkaConsumerFactory<>(props);
         ConcurrentMessageListenerContainer<K, V> container = new ConcurrentMessageListenerContainer<>(factory, cp);
-        container.setConcurrency(context.getInteger("kafka.concurrent", 4));
+        container.setConcurrency(context.getInteger("kafka.concurrent", 3));
         return container;
     }
 
@@ -54,8 +54,8 @@ public class KafkaUtils {
     // kafkaTemplate生产者模板
     public static <K extends java.io.Serializable, V extends java.io.Serializable>  KafkaTemplate<K, V> createTemplate(Context context) {
         
-        Map<String, Object> senderProps = senderProps(context);
-        ProducerFactory<K, V> factory = new DefaultKafkaProducerFactory<>(senderProps);
+        Map<String, Object> producerProps = producerProps(context);
+        ProducerFactory<K, V> factory = new DefaultKafkaProducerFactory<>(producerProps);
         KafkaTemplate<K, V> template = new KafkaTemplate<>(factory);
         return template;
     }
@@ -94,7 +94,7 @@ public class KafkaUtils {
     }
     
     // producer配置项，通常从Context里读取配置
-    private static Map<String, Object> senderProps(Context ctx) {
+    private static Map<String, Object> producerProps(Context ctx) {
         
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, ctx.getString("kafka.bootstrap.servers"));
